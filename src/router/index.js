@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import firebase from "firebase/app";
 
 import Login from '@/components/Login.vue'
+import Register from '@/components/Register.vue'
 import Home from '@/components/Home.vue'
 import Question from '@/components/Question.vue'
 import Game from '@/components/Game.vue'
@@ -15,6 +16,11 @@ const router = new VueRouter({
       path: '/',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
     },
     {
       path: '/home',

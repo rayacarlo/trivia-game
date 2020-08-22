@@ -14,6 +14,7 @@ Vue.config.productionTip = false
 
 Vue.use(Vuex)
 Vue.use(VueFirestore, {key: 'id'});
+firebase.auth().languageCode = 'en';
 
 const store = new Vuex.Store({
   state: {
@@ -29,6 +30,25 @@ const store = new Vuex.Store({
     }
   },
   actions: {
+    register(context, data) {
+      firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
+      .then(response => {
+        console.log(response)
+        firebase.auth().currentUser.updateProfile({
+          displayName: data.name
+        })
+      })
+      .then(response => {
+        console.log(response)
+        context.commit('set_error_register', null);
+        context.commit('set_user', {email: data.email, displayName: data.name});
+        router.push('/home');
+      })
+      .catch(error => {
+        context.commit('set_error_register', error.message);
+        context.commit('set_user', null);
+      })
+    },
     login(context, data) {
       firebase.auth().signInWithEmailAndPassword(data.email, data.password)
       .then(function (response) {
@@ -46,6 +66,12 @@ const store = new Vuex.Store({
     },
     home() {
       router.push('/home');
+    },
+    toregister() {
+      router.push('/register');
+    },
+    tologin() {
+      router.push('/');
     },
     question() {
       router.push('/question');

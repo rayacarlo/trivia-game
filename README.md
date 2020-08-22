@@ -1,4 +1,4 @@
-# el-muro
+# trivia-game
 
 ## Project setup
 ```

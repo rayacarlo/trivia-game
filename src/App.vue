@@ -31,7 +31,7 @@
 
     <v-app-bar app clipped-left>
       <v-app-bar-nav-icon v-if="user" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <avatar v-if="user" :src="user.avatar" :username="user.name" :size=32 class="mx-2"></avatar>
+      <avatar background-color="teal" v-if="user" :src="user.avatar" :username="user.name" :size=32 class="mx-2"></avatar>
       <v-toolbar-title v-if="user">Welcome {{ user.name }}</v-toolbar-title>
       <v-toolbar-title v-if="!user">Trivia Game</v-toolbar-title>
     </v-app-bar>

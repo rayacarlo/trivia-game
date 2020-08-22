@@ -1,11 +1,11 @@
 <template>
-  <v-form v-model="valid" @submit.prevent="submit">
-    <v-text-field v-model="question" :counter="100" label="Question" required></v-text-field>
-    <v-text-field v-model="answerCorrect" label="Correct answer" required></v-text-field>
-    <v-text-field v-model="answerFake1" label="Fake answer 1" required></v-text-field>
-    <v-text-field v-model="answerFake2" label="Fake answer 2" required></v-text-field>
-    <v-text-field v-model="answerFake3" label="Fake answer 3" required></v-text-field>
-    <v-btn :disabled="!valid" color="red" class="mr-4" @click="cancel">Cancel</v-btn>
+  <v-form lazy-validatio nv-model="valid" @submit.prevent="submit">
+    <v-text-field v-model="question" :counter="100" label="Question" :rules="questionRules" required></v-text-field>
+    <v-text-field v-model="answerCorrect" label="Correct answer" :rules="[v => !!v || 'Answer is required']" required></v-text-field>
+    <v-text-field v-model="answerFake1" label="Fake answer 1" :rules="[v => !!v || 'Answer is required']" required></v-text-field>
+    <v-text-field v-model="answerFake2" label="Fake answer 2" :rules="[v => !!v || 'Answer is required']" required></v-text-field>
+    <v-text-field v-model="answerFake3" label="Fake answer 3" :rules="[v => !!v || 'Answer is required']" required></v-text-field>
+    <v-btn color="red" class="mr-4" @click="cancel">Cancel</v-btn>
     <v-btn color="teal" class="mr-4" type="submit">Add question</v-btn>
   </v-form>
 </template>
@@ -22,6 +22,10 @@ export default {
     answerFake1: '', 
     answerFake2: '', 
     answerFake3: '', 
+    questionRules: [
+      v => !!v || 'Question is required',
+      v => (v && v.length <= 100) || 'Question must be less than 100 characters',
+    ]
   }),
   methods: {
     cancel() {

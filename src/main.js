@@ -29,25 +29,6 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    register(context, data) {
-      firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
-      .then(function (response) {
-        console.log(response);
-        firebase.auth().currentUser.updateProfile({
-          displayName: data.name
-        })
-      })
-      .then((response) => {
-        console.log(response)
-        context.commit('set_error', null);
-        context.commit('set_user', {email: data.email, name: data.name});
-        router.push('/');
-      })
-      .catch(function (error) {
-        context.commit('set_error', error.message);
-        context.commit('set_user', null);
-      });
-    },
     login(context, data) {
       firebase.auth().signInWithEmailAndPassword(data.email, data.password)
       .then(function (response) {
@@ -56,21 +37,30 @@ const store = new Vuex.Store({
         var name = firebase.auth().currentUser.displayName;
           context.commit('set_error', null);
           context.commit('set_user',{email: data.email, name: name});
-          router.push('/');
+          router.push('/home');
       })
       .catch(function(error) {
         context.commit('set_error', error.message);
         context.commit('set_user', null);
       })
     },
+    home() {
+      router.push('/home');
+    },
+    question() {
+      router.push('/question');
+    },
     logout(context) {
       firebase.auth().signOut()
       .then(() => {
         context.commit('set_error', null);
         context.commit('set_user', null);
-        router.push('/auth');
+        router.push('/');
       })
-    }
+    },
+    play() {
+      router.push('/game');
+    },
   }
 })
 

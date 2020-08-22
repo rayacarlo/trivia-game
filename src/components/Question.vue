@@ -32,6 +32,7 @@ export default {
       this.$store.dispatch('home')
     },
     submit() {
+      this.$refs.form.validate()
       let answers = [
         {
           text: this.answerCorrect,

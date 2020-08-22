@@ -2,26 +2,15 @@
   <div>
     <v-img src="@/assets/icon.png" height="160" width="160" class="mx-auto mb-4"></v-img>
     <v-btn class="mb-4" block color="teal" @click="play" dark>Let's play!</v-btn>
-    <v-simple-table>
-        <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="text-left">Name</th>
-            <th class="text-left">Score</th>
-            <th class="text-left">Percentage</th>
-            <th class="text-left">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="score in scores" :key='score.id'>
-              <th>{{ score.name }}</th>
-              <td>{{ score.success }}</td>
-              <td>{{ score.percentage }}</td>
-              <td>{{ score.currentDate }}</td>
-            </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
+    <v-card>
+      <v-card-title>
+        Trivia Game
+        <v-spacer></v-spacer>
+        <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details>
+        </v-text-field>
+      </v-card-title>
+      <v-data-table :headers="headers" :items="scores" :items-per-page="5" :search="search"></v-data-table>
+    </v-card>
   </div>
 </template>
 
@@ -30,6 +19,24 @@ import {db} from '@/firebase'
 
 export default {
   name: 'Home',
+  data () {
+    return {
+      search:'',
+      headers: [
+        {
+          text: 'Player',
+          align: 'start',
+          sortable: false,
+          value: 'name',
+        },
+        { text: 'Score', value: 'success' },
+        { text: 'Percentage', value: 'percentage' },
+        { text: 'Date', value: 'currentDate' }
+      ],
+      players: this.scores
+    }
+  },
+
   computed: {
     user() {
       return this.$store.state.user;

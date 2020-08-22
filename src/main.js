@@ -15,6 +15,7 @@ Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueFirestore, {key: 'id'});
 firebase.auth().languageCode = 'en';
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 
 const store = new Vuex.Store({
   state: {

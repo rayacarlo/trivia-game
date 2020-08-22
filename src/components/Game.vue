@@ -1,30 +1,47 @@
 <template>
-  <v-container>
-    <v-form @submit.prevent="send">
-      <v-card v-for="question in disorderQuestions.slice(0,1)" :key="question.id" max-width="100%" tile>
-        <span class="font-weight-bold mt-4 mx-4">{{ question.text }}</span>
-          <v-radio-group class="my-4" v-model="answer1">
-            <v-radio v-for="(answer, i) in question.answers" :key="i" :label="answer.text" :value="answer.isCorrect ? 'ok' : answer.text" require color="teal"></v-radio>
-          </v-radio-group>
+  <v-form @submit.prevent="send">
+      <v-card>
+        <v-window v-model="onboarding" vertical class="px-6 pt-5"> 
+          <v-window-item v-for="question in randomQuestions.slice(0, 1)" :key="question.id" class="mb-5 px-5 pt-2">
+            <h3 class="teal--text text--darken-2">{{ question.text }}</h3>
+            <v-radio-group v-model="answer1">
+              <v-radio v-for="(answer, i) in question.answers" :key="i" :label="answer.text" :value="answer.isCorrect ? 'ok' : answer.text" color="teal accent-3" require @click="next"></v-radio>
+            </v-radio-group>
+          </v-window-item>
+          <v-window-item v-for="question in randomQuestions.slice(1, 2)" :key="question.id" class="mb-5 px-5 pt-2">
+            <h3 class="teal--text text--darken-2">{{ question.text }}</h3>
+            <v-radio-group v-model="answer2">
+              <v-radio v-for="(answer, i) in question.answers" :key="i" :label="answer.text" :value="answer.isCorrect ? 'ok' : answer.text" color="teal accent-3" require @click="next"></v-radio>
+            </v-radio-group>
+          </v-window-item>
+          <v-window-item v-for="question in randomQuestions.slice(2, 3)" :key="question.id" class="mb-5 px-5 pt-2">
+            <h3 class="teal--text text--darken-2">{{ question.text }}</h3>
+            <v-radio-group v-model="answer3">
+              <v-radio v-for="(answer, i) in question.answers" :key="i" :label="answer.text" :value="answer.isCorrect ? 'ok' : answer.text" color="teal accent-3" require></v-radio>
+            </v-radio-group>
+          </v-window-item>
+        </v-window>
+        <v-card-actions class="justify-space-between">
+          <v-btn text @click="prev">
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-item-group v-model="onboarding" class="text-center" mandatory>
+            <v-item v-for="n in length" :key="`btn-${n}`" v-slot:default="{ active, toggle }">
+              <v-btn :input-value="active" icon @click="toggle">
+                <v-icon>mdi-record</v-icon>
+              </v-btn>
+            </v-item>
+          </v-item-group>
+          <v-btn text @click="next">
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
+        </v-card-actions>
       </v-card>
-      <v-card v-for="question in disorderQuestions.slice(1,2)" :key="question.id" max-width="100%" tile>
-        <span class="font-weight-bold mt-4 mx-4">{{ question.text }}</span>
-          <v-radio-group class="my-4" v-model="answer2">
-            <v-radio v-for="(answer, i) in question.answers" :key="i" :label="answer.text" :value="answer.isCorrect ? 'ok' : answer.text" require color="teal"></v-radio>
-          </v-radio-group>
-      </v-card>
-      <v-card v-for="question in disorderQuestions.slice(2,3)" :key="question.id" max-width="100%" tile>
-        <span class="font-weight-bold mt-4 mx-4">{{ question.text }}</span>
-          <v-radio-group class="my-4" v-model="answer3">
-            <v-radio v-for="(answer, i) in question.answers" :key="i" :label="answer.text" :value="answer.isCorrect ? 'ok' : answer.text" require color="teal"></v-radio>
-          </v-radio-group>
-      </v-card>
-      <span>
-        <v-btn class="my-2" block color="red" @click="cancel">Cancel</v-btn>
-        <v-btn class="my-2" block color="teal" type="submit" :disabled="!valid">Send</v-btn>
-      </span>
+      <v-row justify="center">
+        <v-btn rounded x-large type="submit" dark class="jugar mt-5" min-width="170px" :disabled="!valid">Send
+        </v-btn>
+      </v-row>
     </v-form>
-  </v-container>
 </template>
 
 <script>
@@ -38,10 +55,12 @@ export default {
       answer1: '',
       answer2: '',
       answer3: '',
+      length: 3,
+      onboarding: 0,
     }
   },
   computed: {
-    disorderQuestions() {
+    randomQuestions() {
       let questions = [...this.questions]
       questions.sort(() => 0.5 - Math.random());
       return questions;
@@ -82,6 +101,16 @@ export default {
     },
     cancel() {
       this.$store.dispatch('home')
+    },
+    next () {
+      this.onboarding = this.onboarding + 1 === this.length
+      ? 0
+      : this.onboarding + 1
+    },
+    prev () {
+      this.onboarding = this.onboarding - 1 < 0
+      ? this.length - 1
+      : this.onboarding - 1
     },
   }
 }
